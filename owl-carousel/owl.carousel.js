@@ -37,21 +37,27 @@ if ( typeof Object.create !== "function" ) {
 				base.options.beforeInit.apply(this,[base.$elem]);
 			}
 
-			if (typeof base.options.jsonPath === "string") {
-				var url = base.options.jsonPath;
-
-				function getData(data) {
-					if (typeof base.options.jsonSuccess === "function") {
-						base.options.jsonSuccess.apply(this,[data]);
-					} else {
-						var content = "";
-						for(var i in data["owl"]){
-							content += data["owl"][i]["item"];
-						}
-						base.$elem.html(content);
+			var getData = function(data) {
+				if (typeof base.options.jsonSuccess === "function") {
+					base.options.jsonSuccess.apply(this,[data]);
+				} else {
+					var content = "";
+					for(var i in data["owl"]){
+						content += data["owl"][i]["item"];
 					}
-					base.logIn();
+					base.$elem.html(content);
 				}
+				base.logIn();
+			}
+
+			if (typeof base.options.jsonLoad === "function") {
+				var data = base.options.jsonLoad.apply(this);
+				getData(data);
+			} else if (typeof base.options.jsonLoad === "object") {
+				var data = base.options.jsonLoad;
+				getData(data);
+			} else if (typeof base.options.jsonPath === "string") {
+				var url = base.options.jsonPath;
 				$.getJSON(url,getData);
 			} else {
 				base.logIn();
