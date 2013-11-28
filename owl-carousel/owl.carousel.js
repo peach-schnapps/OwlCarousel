@@ -1453,6 +1453,7 @@ if ( typeof Object.create !== "function" ) {
 		autoHeight : false,
 
 		jsonPath : false,
+		jsonLoad: false,
 		jsonSuccess : false,
 
 		dragBeforeAnimFinish : true,
